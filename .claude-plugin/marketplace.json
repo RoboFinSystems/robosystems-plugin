@@ -1,0 +1,27 @@
+{
+  "name": "robosystems",
+  "description": "RoboSystems plugins for coding agents \u2014 accounting and financial-reporting knowledge graphs over MCP.",
+  "owner": {
+    "name": "RoboSystems",
+    "url": "https://robosystems.ai"
+  },
+  "plugins": [
+    {
+      "name": "robosystems",
+      "source": "./",
+      "displayName": "RoboSystems",
+      "description": "Accounting and financial-reporting knowledge graphs over MCP \u2014 SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor portfolios \u2014 plus skills for SEC filing analysis, month-end close, and graph exploration.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": [
+        "robosystems",
+        "roboledger",
+        "accounting",
+        "sec",
+        "xbrl",
+        "quickbooks",
+        "mcp"
+      ]
+    }
+  ]
+}
