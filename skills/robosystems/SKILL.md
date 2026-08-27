@@ -6,7 +6,7 @@ description: >-
   portfolios). Use whenever "RoboSystems", "RoboLedger", "RoboInvestor", the `sec`
   graph, or a `kg…` graph id is mentioned, to understand what the connection is
   scoped to, which tool family answers an intent, and how to explore a graph
-  (schema → example queries → GraphQL or Cypher). For SEC company analysis use the
+  (schema → example queries → Cypher, plus GraphQL on ledger graphs). For SEC company analysis use the
   sec-filing-analysis skill; for a month-end close use roboledger-close.
 ---
 
@@ -14,7 +14,8 @@ description: >-
 
 RoboSystems turns financial data into knowledge graphs that an agent can query
 directly over MCP. Every graph is a LadybugDB property graph carrying XBRL-grade
-financial semantics, with a typed GraphQL surface and read-only Cypher on top.
+financial semantics, with read-only Cypher on every graph and a typed GraphQL surface on ledger and
+investor graphs.
 
 ## What you are connected to
 
@@ -23,7 +24,7 @@ One authorization is **one graph**. The consent screen picks it, and the server'
 
 | Graph | What it is | Tools |
 |---|---|---|
-| `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | ~12 analytical tools |
+| `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | 10 analytical tools; Cypher, no GraphQL |
 | A RoboLedger graph (`kg…`) | A customer's general ledger: fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | ~85 tools |
 | A RoboInvestor graph | Portfolios, securities, positions alongside the ledger. | ledger set + portfolio tools |
 | A subgraph (`kg…_name`) | A workspace hanging off a parent graph; writable Cypher lives here. | parent's set, no memory |
@@ -46,7 +47,8 @@ told to create one at robosystems.ai first.
 - **Narrative: MD&A, risk factors, policies, the tenant's own procedure docs** →
   `search-documents`, then `get-document-section` / `get-document`.
 - **Typed reads of ledger data** (fiscal calendar, entries, agents, mappings) →
-  `query-graphql` after `get-graphql-schema`.
+  `query-graphql` after `get-graphql-schema`. Ledger and investor graphs only —
+  shared repositories such as `sec` expose no GraphQL tools.
 - **Anything the typed surface doesn't cover** → `read-graph-cypher` after
   `get-graph-schema` and `get-example-queries`.
 - **Month-end close** → call `get-close-playbook` first, then follow the
@@ -61,7 +63,8 @@ told to create one at robosystems.ai first.
 1. `get-graph-schema` — node labels, relationship types, properties.
 2. `get-example-queries` — working Cypher for *this* graph's schema. Copy and
    adapt; don't write a traversal from scratch.
-3. `query-graphql` for typed reads; `read-graph-cypher` for raw traversal.
+3. `read-graph-cypher` for raw traversal on any graph; `query-graphql` for typed
+   reads where the graph offers it (ledger and investor graphs).
 
 Cypher rules that matter on these graphs:
 

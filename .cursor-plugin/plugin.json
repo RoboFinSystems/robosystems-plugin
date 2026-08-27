@@ -1,0 +1,32 @@
+{
+  "name": "robosystems",
+  "displayName": "RoboSystems",
+  "version": "1.0.0",
+  "description": "Accounting and financial-reporting knowledge graphs over MCP — SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor portfolios — plus skills for SEC filing analysis, month-end close, and graph exploration.",
+  "author": {
+    "name": "RoboSystems",
+    "email": "admin@robosystems.ai"
+  },
+  "homepage": "https://robosystems.ai",
+  "repository": "https://github.com/RoboFinSystems/robosystems-plugin",
+  "license": "Apache-2.0",
+  "keywords": [
+    "robosystems",
+    "roboledger",
+    "roboinvestor",
+    "accounting",
+    "sec",
+    "edgar",
+    "xbrl",
+    "quickbooks",
+    "financial-reporting",
+    "knowledge-graph",
+    "mcp"
+  ],
+  "logo": "assets/logo.png",
+  "mcpServers": {
+    "robosystems": {
+      "url": "https://api.robosystems.ai/v1/mcp"
+    }
+  }
+}
