@@ -23,7 +23,7 @@
     "knowledge-graph",
     "mcp"
   ],
-  "logo": "assets/logo.png",
+  "logo": "assets/logo-tile.png",
   "mcpServers": {
     "robosystems": {
       "url": "https://api.robosystems.ai/v1/mcp"
