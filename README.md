@@ -1,6 +1,6 @@
 # RoboSystems plugin
 
-Accounting and financial-reporting knowledge graphs for coding agents. This plugin wires the [RoboSystems](https://robosystems.ai) MCP server into Claude Code, Grok Build, and any agent that reads the Claude plugin format, and ships three skills that teach the agent how to use it well.
+Accounting and financial-reporting knowledge graphs for coding agents. This plugin wires the [RoboSystems](https://robosystems.ai) MCP server into Claude Code, Cursor, Grok Build, and any agent that reads the Claude or Cursor plugin format, and ships three skills that teach the agent how to use it well.
 
 **What the server exposes** — one authorization is one graph, chosen at consent:
 
@@ -30,6 +30,8 @@ claude plugin install robosystems@robosystems
 The first tool call opens the browser for the OAuth consent screen, where you sign in to RoboSystems and pick the graph. To work on a different graph later, run `/mcp` and reauthenticate.
 
 **Grok Build** — install from the [xAI plugin marketplace](https://github.com/xai-org/plugin-marketplace) once listed; the plugin is the same directory.
+
+**Cursor** — install from the [Cursor Marketplace](https://cursor.com/marketplace) once listed (**Customize → Plugins**), or test it locally by copying this repository to `~/.cursor/plugins/local/robosystems` and running **Developer: Reload Window**. The `.cursor-plugin/` manifest points at the same server and skills.
 
 **Any MCP client** — the server is `https://api.robosystems.ai/v1/mcp` (Streamable HTTP, OAuth 2.1 with PKCE, discovery via RFC 9728 / RFC 8414). Per-graph URLs with an API key are also available; see the [MCP guide](https://github.com/RoboFinSystems/robosystems/wiki/AI-Operators-and-MCP).
 
