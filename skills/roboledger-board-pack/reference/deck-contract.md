@@ -98,6 +98,31 @@ table; a figure that will not fit goes in the `subhead` or the `footnote`. The
 board losing a number to a layout constraint is the one outcome this contract
 exists to prevent.
 
+## A deck that already fits
+
+`assets/example-deck.json` is a complete deck — all nine slide kinds, each sitting
+**at** the capacity limits in the table above, with fictional numbers. It exists so the
+template can be checked on its own, before any real figures are in it:
+
+```bash
+python3 - <<'EOF'
+import re, pathlib
+src = pathlib.Path('assets/board-pack.html').read_text()
+deck = pathlib.Path('assets/example-deck.json').read_text()
+out = re.sub(r'(<script id="deck"[^>]*>).*?(</script>)',
+             lambda m: m.group(1) + "\n" + deck + "\n" + m.group(2), src, flags=re.S)
+pathlib.Path('/tmp/example-board-pack.html').write_text(out)
+EOF
+```
+
+Then run the gate below against `/tmp/example-board-pack.html`. It passes today: nine
+slides, no overflow, nothing dropped, printing to nine pages at 1440×810.
+
+Because it sits *at* the limits rather than comfortably inside them, it is also what
+catches a geometry regression — a change that costs a row of vertical space flags here
+before it reaches a real board pack. Adding a bullet to its bullets slide is enough to
+make the gate fail, which is the intended behaviour, not a bug.
+
 ## The gate
 
 The template measures itself after layout and marks every slide that overran,

@@ -1,0 +1,366 @@
+{
+  "meta": {
+    "entity": "Northwind Robotics, Inc.",
+    "title": "Board Pack",
+    "period": "Q3 FY2026 \u00b7 quarter ended 31 August 2026",
+    "prepared": "2026-09-20",
+    "theme": "light"
+  },
+  "slides": [
+    {
+      "kind": "cover",
+      "mark": "NR",
+      "headline": "Q3 FY2026 Board Pack",
+      "subhead": "Quarter ended 31 August 2026 \u00b7 prepared from a closed period",
+      "attestation": [
+        {
+          "label": "Period",
+          "value": "Closed 2026-09-04"
+        },
+        {
+          "label": "Source",
+          "value": "RoboLedger"
+        },
+        {
+          "label": "Guard rails",
+          "value": "12 of 12 passed"
+        }
+      ]
+    },
+    {
+      "kind": "section",
+      "number": "01",
+      "headline": "Where we stand",
+      "lead": "The quarter in six numbers, then the statements behind them."
+    },
+    {
+      "kind": "kpi",
+      "eyebrow": "The scoreboard",
+      "headline": "Q3 at a glance",
+      "subhead": "Against plan and against the same quarter last year",
+      "source": "fiscalCalendar, summary, computeForecast",
+      "cards": [
+        {
+          "label": "Revenue",
+          "value": 14200000,
+          "format": "usdc",
+          "delta": 0.36,
+          "deltaLabel": "YoY",
+          "tone": "positive"
+        },
+        {
+          "label": "Gross margin",
+          "value": 0.71,
+          "format": "pct",
+          "delta": 0.04,
+          "deltaLabel": "YoY",
+          "tone": "positive"
+        },
+        {
+          "label": "Operating income",
+          "value": 1182000,
+          "format": "usdc",
+          "delta": 1.63,
+          "deltaLabel": "YoY",
+          "tone": "positive"
+        },
+        {
+          "label": "Net burn",
+          "value": -1800000,
+          "format": "usdc",
+          "delta": -0.12,
+          "deltaLabel": "QoQ",
+          "tone": "warning"
+        },
+        {
+          "label": "Cash",
+          "value": 34200000,
+          "format": "usdc",
+          "tone": "neutral"
+        },
+        {
+          "label": "Runway",
+          "value": 19,
+          "format": "mo",
+          "tone": "positive",
+          "highlight": true,
+          "note": "24 months under the revised plan"
+        }
+      ]
+    },
+    {
+      "kind": "statement",
+      "eyebrow": "The books",
+      "headline": "Income statement",
+      "subhead": "$ thousands \u00b7 Q3 FY2026 vs Q3 FY2025",
+      "source": "trialBalance, statement",
+      "unit": "thousands",
+      "format": "usd",
+      "columns": [
+        "Q3 FY26",
+        "Q3 FY25",
+        "Var"
+      ],
+      "rows": [
+        [
+          "Revenue",
+          14200,
+          10400,
+          3800
+        ],
+        {
+          "label": "Cost of revenue",
+          "values": [
+            -4118,
+            -3224,
+            -894
+          ],
+          "indent": 1
+        },
+        {
+          "label": "Gross profit",
+          "values": [
+            10082,
+            7176,
+            2906
+          ],
+          "emphasis": "subtotal"
+        },
+        {
+          "label": "Research and development",
+          "values": [
+            -4300,
+            -3600,
+            -700
+          ],
+          "indent": 1
+        },
+        {
+          "label": "Sales and marketing",
+          "values": [
+            -3100,
+            -2500,
+            -600
+          ],
+          "indent": 1
+        },
+        {
+          "label": "General and administrative",
+          "values": [
+            -1500,
+            -1300,
+            -200
+          ],
+          "indent": 1
+        },
+        {
+          "label": "Total operating expenses",
+          "values": [
+            -8900,
+            -7400,
+            -1500
+          ],
+          "emphasis": "subtotal"
+        },
+        {
+          "label": "Operating income",
+          "values": [
+            1182,
+            -224,
+            1406
+          ],
+          "emphasis": "total",
+          "signed": true
+        },
+        {
+          "label": "Operating margin",
+          "values": [
+            0.083,
+            -0.022,
+            0.105
+          ],
+          "format": "pct",
+          "signed": true
+        }
+      ]
+    },
+    {
+      "kind": "table",
+      "eyebrow": "The controls",
+      "headline": "Close guard rails",
+      "subhead": "Every check run before this pack was drawn",
+      "source": "periodCloseStatus",
+      "columns": [
+        "Check",
+        "Result"
+      ],
+      "footnote": "A failed guard rail blocks the close; none did this quarter.",
+      "rows": [
+        [
+          "Trial balance in balance",
+          "Passed"
+        ],
+        [
+          "Subledgers tie to control accounts",
+          "Passed"
+        ],
+        [
+          "Bank reconciliations complete",
+          "Passed"
+        ],
+        [
+          "Revenue cut-off tested",
+          "Passed"
+        ],
+        [
+          "Accruals posted and reviewed",
+          "Passed"
+        ],
+        [
+          "Intercompany eliminated",
+          "Passed"
+        ],
+        [
+          "Fixed asset roll-forward ties",
+          "Passed"
+        ],
+        [
+          "Prior-period adjustments disclosed",
+          "Passed"
+        ]
+      ]
+    },
+    {
+      "kind": "chart",
+      "eyebrow": "The trend",
+      "headline": "Revenue against plan",
+      "subhead": "$ millions \u00b7 actuals to Q3, plan through Q4",
+      "source": "computeForecast",
+      "chartType": "line",
+      "format": "usdc",
+      "categories": [
+        "Q4 FY24",
+        "Q1 FY25",
+        "Q2 FY25",
+        "Q3 FY25",
+        "Q4 FY25",
+        "Q1 FY26",
+        "Q2 FY26",
+        "Q3 FY26",
+        "Q4 FY26E"
+      ],
+      "series": [
+        {
+          "name": "Actual",
+          "values": [
+            7200000,
+            8100000,
+            9400000,
+            10400000,
+            11900000,
+            9100000,
+            11800000,
+            14200000,
+            null
+          ]
+        },
+        {
+          "name": "Plan",
+          "values": [
+            7000000,
+            8000000,
+            9000000,
+            10000000,
+            11500000,
+            9500000,
+            11200000,
+            13000000,
+            16000000
+          ],
+          "projected": true
+        }
+      ],
+      "highlight": "Actual",
+      "labelSeries": "Actual",
+      "takeaway": "Ahead of plan for two consecutive quarters; Q4 plan raised accordingly."
+    },
+    {
+      "kind": "split",
+      "eyebrow": "The risk",
+      "headline": "Concentration is the exposure to watch",
+      "source": "openReceivables, openReceivablesByAgent",
+      "bullets": [
+        "Top customer is 28% of revenue, up from 19% a year ago.",
+        "Two contracts renew in Q1; both are in late-stage negotiation.",
+        "DSO improved to 41 days from 54, so collection is not the concern.",
+        "No single vendor exceeds 8% of cost of revenue.",
+        "Mitigation: three enterprise pilots start in Q4."
+      ],
+      "right": {
+        "columns": [
+          "Customer",
+          "% rev"
+        ],
+        "format": "pct",
+        "rows": [
+          [
+            "Meridian Freight",
+            0.28
+          ],
+          [
+            "Calder Manufacturing",
+            0.14
+          ],
+          [
+            "Orsay Logistics",
+            0.11
+          ],
+          [
+            "Westbrook Foods",
+            0.09
+          ],
+          [
+            "All other (37)",
+            0.38
+          ]
+        ]
+      },
+      "footnote": "Percentages of trailing-twelve-month revenue."
+    },
+    {
+      "kind": "bullets",
+      "eyebrow": "The asks",
+      "headline": "What we need from the board",
+      "source": "Prepared by management",
+      "numbered": true,
+      "bullets": [
+        "Approve the FY27 operating plan as presented.",
+        "Ratify the option pool increase of 1,200,000 shares.",
+        "Approve the audit engagement letter for FY26.",
+        "Delegate authority for the Series C bridge facility.",
+        "Appoint the compensation committee chair.",
+        "Authorise the lease extension on the Portland facility."
+      ],
+      "stats": [
+        {
+          "label": "Decisions",
+          "value": 6,
+          "format": "num"
+        },
+        {
+          "label": "Requiring a vote",
+          "value": 4,
+          "format": "num"
+        }
+      ]
+    },
+    {
+      "kind": "callout",
+      "label": "Runway at current burn",
+      "value": 19,
+      "format": "mo",
+      "tone": "positive",
+      "context": "Extends to 24 months under the revised plan, without a raise."
+    }
+  ]
+}
