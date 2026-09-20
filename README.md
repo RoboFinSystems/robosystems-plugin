@@ -1,6 +1,6 @@
 # RoboSystems plugin
 
-Accounting and financial-reporting knowledge graphs for coding agents. This plugin wires the [RoboSystems](https://robosystems.ai) MCP server into Claude Code, Cursor, Grok Build, and any agent that reads the Claude or Cursor plugin format, and ships three skills that teach the agent how to use it well.
+Accounting and financial-reporting knowledge graphs for coding agents. This plugin wires the [RoboSystems](https://robosystems.ai) MCP server into Claude Code, Cursor, Grok Build, and any agent that reads the Claude or Cursor plugin format, and ships four skills that teach the agent how to use it well.
 
 **What the server exposes** — one authorization is one graph, chosen at consent:
 
@@ -17,6 +17,7 @@ Accounting and financial-reporting knowledge graphs for coding agents. This plug
 | `robosystems` | Orientation — what the connection is scoped to, which tool family answers an intent, how to explore a graph (schema → example queries → GraphQL or Cypher) and the Cypher rules that matter |
 | `sec-filing-analysis` | Statements by ticker or CIK, cross-period and cross-company comparisons, concept → XBRL element, full-text search over 10-K/10-Q narrative |
 | `roboledger-close` | Month-end close: orient, clear blockers, draft schedule-driven entries, review, close, verify — and how to set up schedules for a first close |
+| `roboledger-board-pack` | A board presentation from your ledger: pull the closed period, verify it against its guard rails, render a deck to HTML and PDF, then revise the operating plan from what the board decides |
 
 ## Install
 
@@ -41,7 +42,9 @@ A RoboSystems account (sign up at [robosystems.ai](https://robosystems.ai)). To 
 
 ## Security
 
-The plugin contains no scripts, hooks, or commands — only an MCP server URL and three Markdown skills. The only network endpoint it reaches is `api.robosystems.ai`, over OAuth; it reads no local files, environment variables, or secrets. Every tool carries MCP `readOnlyHint` / `destructiveHint` annotations so the client can confirm before a write.
+The plugin contains no hooks, no commands, and nothing that runs on its own — an MCP server URL, four Markdown skills, and one HTML deck template. The only network endpoint it reaches is `api.robosystems.ai`, over OAuth; it reads no environment variables and no secrets. Every tool carries MCP `readOnlyHint` / `destructiveHint` annotations so the client can confirm before a write.
+
+Two things `roboledger-board-pack` does that the other skills do not, both visible to you before they happen: it writes the deck into your working directory, and it asks your agent to run local headless Chrome to print that file to PDF. It builds the deck from reads alone; filing the pack back to your ledger, remembering the board's decisions, and revising the operating plan are each offered separately and need your explicit yes.
 
 ## License
 

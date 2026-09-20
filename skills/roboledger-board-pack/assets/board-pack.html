@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Board Pack</title>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     THE DECK. This is the only block you edit.
+     Replace the JSON below with your deck. Every slide is drawn from it;
+     there is no slide markup anywhere in this file.
+     Contract: reference/deck-contract.md
+     ═════════════════════════════════════════════════════════════════════ -->
+<script id="deck" type="application/json">
+{
+  "meta": {
+    "entity": "Entity name",
+    "title": "Board Pack",
+    "period": "Period",
+    "prepared": "Date",
+    "theme": "light"
+  },
+  "slides": []
+}
+</script>
+
+<style>
+/* ── Brand tokens ──────────────────────────────────────────────────────
+   RoboSystems content system, light surface (the board-pack default).
+   Chart hues are validated: light #2563eb/#16bdca, dark #3b7af5/#0bab96.
+   Status hues are reserved for variance and never used as a series.     */
+:root{
+  --bg:#ffffff; --panel:#f9fafb; --card:#ffffff; --raised:#ffffff;
+  --line:#e5e7eb; --line-strong:#d1d5db;
+  --ink:#1b3a57; --body:#374151; --muted:#6b7280; --faint:#9ca3af;
+  --accent:#2563eb; --accent-soft:#eff6ff;
+  --s1:#2563eb; --s2:#16bdca;
+  --seq1:#dbeafe; --seq2:#93bbfd; --seq3:#3b7af5; --seq4:#1d4ed8;
+  --pos:#0e9f6e; --neg:#e02424; --warn:#d03801;
+  --grid:#e5e7eb;
+  --font:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+body[data-surface="dark"]{
+  --bg:#0a0e1a; --panel:#0e1424; --card:#131b30; --raised:#182238;
+  --line:#1c2942; --line-strong:#2a3a59;
+  --ink:#f4f7fb; --body:#c3ccdb; --muted:#8593aa; --faint:#5a6783;
+  --accent:#3b7af5; --accent-soft:#132038;
+  --s1:#3b7af5; --s2:#0bab96;
+  --seq1:#172e47; --seq2:#1d4ed8; --seq3:#3b7af5; --seq4:#6098fa;
+  --pos:#31c48d; --neg:#f98080; --warn:#ff8a4c;
+  --grid:#1c2942;
+}
+
+@page{size:1920px 1080px;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--body);font-family:var(--font);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;-webkit-font-smoothing:antialiased}
+
+.slide{position:relative;width:1920px;height:1080px;padding:88px 120px 132px;
+  background:var(--bg);page-break-after:always;break-after:page;overflow:hidden;
+  display:flex;flex-direction:column}
+.slide:last-child{page-break-after:auto;break-after:auto}
+.slide.cover,.slide.section{padding-bottom:96px}
+.slide[data-overflow="true"]{outline:6px solid var(--neg);outline-offset:-6px}
+.ovf{position:absolute;right:0;top:0;background:var(--neg);color:#fff;
+  font:700 22px/1 var(--font);padding:14px 22px;letter-spacing:.06em;z-index:9}
+
+/* ── slide chrome ─────────────────────────────────────────────────────── */
+.eyebrow{font-size:22px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:22px;flex:0 0 auto}
+.eyebrow b{color:var(--accent);font-weight:600}
+h1.headline{font-size:62px;line-height:1.08;font-weight:700;color:var(--ink);
+  letter-spacing:-.015em;flex:0 0 auto}
+.subhead{font-size:30px;line-height:1.35;color:var(--muted);margin-top:16px;flex:0 0 auto}
+.body-area{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+  justify-content:center;padding:44px 0 0}
+.foot{position:absolute;left:120px;right:120px;bottom:52px;flex:0 0 auto}
+.foot .rule{border-top:1px solid var(--line);margin-bottom:22px}
+.foot .row{display:flex;justify-content:space-between;align-items:baseline;
+  font-size:21px;color:var(--faint)}
+.foot .src{max-width:1300px}
+.foot .pg{font-variant-numeric:tabular-nums}
+
+/* ── cover ────────────────────────────────────────────────────────────── */
+.cover{justify-content:center}
+.cover .mark{font-size:24px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:40px}
+.cover h1{font-size:104px;line-height:1.05;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.cover .sub{font-size:44px;color:var(--muted);margin-top:28px}
+.cover .attest{margin-top:64px;border-top:1px solid var(--line);padding-top:34px;
+  display:flex;gap:80px;flex-wrap:wrap}
+.cover .attest div{font-size:24px;color:var(--muted)}
+.cover .attest b{display:block;font-size:30px;color:var(--ink);font-weight:600;margin-top:8px}
+
+/* ── section divider ──────────────────────────────────────────────────── */
+.section{justify-content:center}
+.section .num{font-size:180px;font-weight:700;color:var(--seq2);line-height:1;letter-spacing:-.03em}
+.section h1{font-size:82px;margin-top:20px}
+.section .lead{font-size:34px;color:var(--muted);margin-top:26px;max-width:1300px;line-height:1.45}
+
+/* ── bullets ──────────────────────────────────────────────────────────── */
+ul.bullets{list-style:none;display:flex;flex-direction:column;gap:30px}
+ul.bullets li{position:relative;padding-left:52px;font-size:34px;line-height:1.42;color:var(--body)}
+ul.bullets li::before{content:"";position:absolute;left:0;top:16px;width:20px;height:4px;
+  background:var(--accent);border-radius:2px}
+ul.bullets.numbered{counter-reset:b}
+ul.bullets.numbered li{counter-increment:b;padding-left:72px}
+ul.bullets.numbered li::before{content:counter(b);width:auto;height:auto;top:0;background:none;
+  color:var(--accent);font-size:32px;font-weight:700;font-variant-numeric:tabular-nums}
+.stat-rail{display:flex;gap:28px;margin-top:48px}
+.stat-rail .s{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px 32px}
+.stat-rail .s .l{font-size:22px;color:var(--muted)}
+.stat-rail .s .v{font-size:48px;font-weight:700;color:var(--ink);margin-top:10px}
+
+/* ── kpi cards ────────────────────────────────────────────────────────── */
+.kpis{display:grid;gap:30px}
+.kpis[data-n="1"],.kpis[data-n="2"],.kpis[data-n="3"]{grid-template-columns:repeat(var(--n),1fr)}
+.kpis[data-n="4"]{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}
+.kpis[data-n="5"],.kpis[data-n="6"]{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr)}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:38px 42px;
+  display:flex;flex-direction:column;justify-content:center;min-height:0}
+.kpi.hl{border-color:var(--accent);background:var(--accent-soft)}
+.kpi .l{font-size:25px;color:var(--muted)}
+.kpi .v{font-size:72px;font-weight:700;color:var(--ink);line-height:1.05;margin-top:14px;letter-spacing:-.02em}
+.kpi .d{font-size:26px;font-weight:600;margin-top:16px;display:flex;align-items:center;gap:10px}
+.kpi .d .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+.kpi .n{font-size:22px;color:var(--faint);margin-top:12px}
+.t-pos{color:var(--pos)} .t-neg{color:var(--neg)} .t-warn{color:var(--warn)} .t-neu{color:var(--muted)}
+.bg-pos{background:var(--pos)} .bg-neg{background:var(--neg)} .bg-warn{background:var(--warn)} .bg-neu{background:var(--faint)}
+
+/* ── tables & statements ──────────────────────────────────────────────── */
+table.fin{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table.fin th{font-size:24px;font-weight:600;color:var(--muted);text-align:right;
+  padding:0 0 18px;border-bottom:1px solid var(--line-strong)}
+table.fin th:first-child{text-align:left}
+table.fin td{font-size:28px;color:var(--body);text-align:right;padding:15px 0;
+  border-bottom:1px solid var(--line)}
+table.fin td:first-child{text-align:left;color:var(--ink)}
+table.fin th+th,table.fin td+td{padding-left:56px}
+table.fin tr.subtotal td{font-weight:600;color:var(--ink)}
+table.fin tr.total td{font-weight:700;color:var(--ink);font-size:30px;
+  border-top:2px solid var(--line-strong);border-bottom:none;padding-top:20px}
+table.fin tr.hl td{background:var(--accent-soft)}
+table.fin tr.hl.tone-neg td{background:color-mix(in srgb,var(--neg) 10%,transparent)}
+table.fin tr.hl.tone-warn td{background:color-mix(in srgb,var(--warn) 12%,transparent)}
+table.fin td.ind1{padding-left:40px} table.fin td.ind2{padding-left:80px}
+table.fin td.v-pos{color:var(--pos)} table.fin td.v-neg{color:var(--neg)}
+.fn{font-size:22px;color:var(--faint);margin-top:26px;line-height:1.4}
+
+/* ── chart ────────────────────────────────────────────────────────────── */
+.legend{display:flex;gap:44px;margin-bottom:22px;flex:0 0 auto}
+.legend .k{display:flex;align-items:center;gap:14px;font-size:25px;color:var(--muted)}
+.legend .k i{width:34px;height:8px;border-radius:4px;display:block}
+.chartwrap{flex:1 1 auto;min-height:0}
+.chartwrap svg{width:100%;height:100%;display:block;overflow:visible}
+.takeaway{font-size:27px;color:var(--body);margin-top:26px;flex:0 0 auto;line-height:1.4}
+.takeaway b{color:var(--ink);font-weight:600}
+text{font-family:var(--font)}
+.ax{font-size:23px;fill:var(--faint)}
+.ax.hlx{fill:var(--ink);font-weight:600}
+.axv{font-size:23px;fill:var(--faint);font-variant-numeric:tabular-nums}
+.dl{font-size:26px;font-weight:600;fill:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ── split ────────────────────────────────────────────────────────────── */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+
+/* ── callout ──────────────────────────────────────────────────────────── */
+.callout{align-items:flex-start;justify-content:center}
+.callout .lab{font-size:32px;color:var(--muted)}
+.callout .big{font-size:200px;font-weight:700;line-height:.98;color:var(--ink);
+  letter-spacing:-.035em;margin:24px 0}
+.callout .big.t-pos{color:var(--pos)} .callout .big.t-neg{color:var(--neg)}
+.callout .big.t-warn{color:var(--warn)}
+.callout .ctx{font-size:34px;color:var(--body);max-width:1400px;line-height:1.42}
+</style>
+</head>
+<body>
+<script>
+(function(){
+"use strict";
+const deck = JSON.parse(document.getElementById("deck").textContent);
+const meta = deck.meta || {};
+document.body.dataset.surface = meta.theme === "dark" ? "dark" : "light";
+document.title = [meta.entity, meta.title, meta.period].filter(Boolean).join(" — ");
+
+/* ── formatting ─────────────────────────────────────────────────────── */
+const UNIT = { ones:1, thousands:1e3, millions:1e6 };
+function num(v, opts){
+  opts = opts || {};
+  if (v === null || v === undefined || v === "") return "—";
+  if (typeof v === "string") return v;
+  const f = opts.format || "num", u = UNIT[opts.unit] || 1, n = v / u;
+  const dp = opts.dp !== undefined ? opts.dp : (f === "pct" || f === "x" || f === "mo" ? 1 : 0);
+  const abs = Math.abs(n);
+  const body = abs.toLocaleString("en-US",{minimumFractionDigits:dp,maximumFractionDigits:dp});
+  const sign = n < 0 ? "-" : "";
+  if (f === "usd")  return sign + "$" + body;
+  if (f === "pct")  return sign + body + "%";
+  if (f === "x")    return sign + body + "x";
+  if (f === "mo")   return sign + body + " mo";
+  if (f === "usdc") return compact(n, "$");
+  return sign + body;
+}
+function compact(n, pre){
+  pre = pre || "";
+  const a = Math.abs(n), s = n < 0 ? "-" : "";
+  const pick = a >= 1e9 ? [1e9,"B"] : a >= 1e6 ? [1e6,"M"] : a >= 1e3 ? [1e3,"K"] : [1,""];
+  const x = a / pick[0];
+  return s + pre + (x >= 100 || pick[1] === "" ? Math.round(x).toLocaleString("en-US")
+        : x.toFixed(1).replace(/\.0$/,"")) + pick[1];
+}
+const toneClass = t => t === "positive" ? "t-pos" : t === "negative" ? "t-neg"
+  : t === "warning" ? "t-warn" : "t-neu";
+const toneBg = t => t === "positive" ? "bg-pos" : t === "negative" ? "bg-neg"
+  : t === "warning" ? "bg-warn" : "bg-neu";
+
+function el(tag, cls, txt){
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (txt !== undefined && txt !== null) n.textContent = txt;
+  return n;
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function svg(tag, attrs){
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+/* ── slide chrome ───────────────────────────────────────────────────── */
+function head(host, s, idx){
+  if (s.eyebrow){
+    const e = el("div","eyebrow");
+    const b = el("b", null, String(idx).padStart(2,"0"));
+    e.appendChild(b); e.appendChild(document.createTextNode("  ·  " + s.eyebrow));
+    host.appendChild(e);
+  }
+  if (s.headline) host.appendChild(el("h1","headline", s.headline));
+  if (s.subhead)  host.appendChild(el("div","subhead", s.subhead));
+}
+function foot(host, s, page){
+  const f = el("div","foot");
+  f.appendChild(el("div","rule"));
+  const r = el("div","row");
+  r.appendChild(el("div","src", s.source || [meta.entity, meta.period].filter(Boolean).join("  ·  ")));
+  r.appendChild(el("div","pg", page === null ? "" : String(page)));
+  f.appendChild(r);
+  host.appendChild(f);
+}
+
+/* ── kinds ──────────────────────────────────────────────────────────── */
+const kinds = {};
+
+kinds.cover = function(host, s){
+  host.classList.add("cover");
+  host.appendChild(el("div","mark", s.mark || "RoboLedger"));
+  host.appendChild(el("h1", null, s.headline || meta.entity || ""));
+  host.appendChild(el("div","sub", s.subhead || [meta.title, meta.period].filter(Boolean).join("  ·  ")));
+  if (s.attestation && s.attestation.length){
+    const a = el("div","attest");
+    s.attestation.forEach(x => {
+      const d = el("div", null, x.label);
+      d.appendChild(el("b", null, x.value));
+      a.appendChild(d);
+    });
+    host.appendChild(a);
+  }
+};
+
+kinds.section = function(host, s, idx){
+  host.classList.add("section");
+  host.appendChild(el("div","num", String(s.number !== undefined ? s.number : idx).padStart(2,"0")));
+  host.appendChild(el("h1","headline", s.headline || ""));
+  if (s.lead) host.appendChild(el("div","lead", s.lead));
+};
+
+kinds.bullets = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area");
+  const ul = el("ul", "bullets" + (s.numbered ? " numbered" : ""));
+  (s.bullets || []).forEach(b => ul.appendChild(el("li", null, b)));
+  body.appendChild(ul);
+  if (s.stats && s.stats.length){
+    const rail = el("div","stat-rail");
+    s.stats.forEach(st => {
+      const c = el("div","s");
+      c.appendChild(el("div","l", st.label));
+      c.appendChild(el("div","v", num(st.value, st)));
+      rail.appendChild(c);
+    });
+    body.appendChild(rail);
+  }
+  host.appendChild(body);
+};
+
+kinds.kpi = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area");
+  const all6 = s.cards || [];
+  const cards = all6.slice(0, 6);
+  if (all6.length > cards.length) host.dataset.dropped = String(all6.length - cards.length);
+  const g = el("div","kpis");
+  g.dataset.n = cards.length;
+  g.style.setProperty("--n", cards.length);
+  cards.forEach(c => {
+    const k = el("div","kpi" + (c.highlight ? " hl" : ""));
+    k.appendChild(el("div","l", c.label));
+    k.appendChild(el("div","v", num(c.value, c)));
+    if (c.delta !== undefined && c.delta !== null){
+      const d = el("div","d " + toneClass(c.tone));
+      d.appendChild(el("i","dot " + toneBg(c.tone)));
+      d.appendChild(document.createTextNode(
+        (typeof c.delta === "string" ? c.delta : num(c.delta, {format:c.deltaFormat||"pct",dp:1}))
+        + (c.deltaLabel ? " " + c.deltaLabel : "")));
+      k.appendChild(d);
+    }
+    if (c.note) k.appendChild(el("div","n", c.note));
+    g.appendChild(k);
+  });
+  body.appendChild(g);
+  host.appendChild(body);
+};
+
+function finTable(s){
+  const t = el("table","fin");
+  if (s.columns && s.columns.length){
+    const tr = el("tr");
+    s.columns.forEach(c => tr.appendChild(el("th", null, c)));
+    const th = el("thead"); th.appendChild(tr); t.appendChild(th);
+  }
+  const tb = el("tbody");
+  (s.rows || []).forEach(r => {
+    const row = Array.isArray(r) ? { label:r[0], values:r.slice(1) } : r;
+    const tr = el("tr", (row.emphasis || "") + (row.highlight ? " hl" : "")
+      + (row.tone === "negative" ? " tone-neg" : row.tone === "warning" ? " tone-warn" : ""));
+    const lab = el("td", row.indent ? "ind" + row.indent : null, row.label);
+    tr.appendChild(lab);
+    (row.values || []).forEach(v => {
+      const cls = row.signed && typeof v === "number" ? (v < 0 ? "v-neg" : v > 0 ? "v-pos" : null) : null;
+      tr.appendChild(el("td", cls, num(v, { format:row.format || s.format, unit:row.unit || s.unit, dp:row.dp })));
+    });
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb);
+  return t;
+}
+
+kinds.statement = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area");
+  body.appendChild(finTable(s));
+  if (s.footnote) body.appendChild(el("div","fn", s.footnote));
+  host.appendChild(body);
+};
+kinds.table = kinds.statement;
+
+kinds.split = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area");
+  const g = el("div","split");
+  const left = el("div");
+  const ul = el("ul","bullets");
+  (s.bullets || []).forEach(b => ul.appendChild(el("li", null, b)));
+  left.appendChild(ul);
+  const right = el("div");
+  if (s.right && s.right.kind === "kpi"){
+    const holder = el("div");
+    kinds.kpi(holder, { cards:s.right.cards });
+    right.appendChild(holder.querySelector(".kpis"));
+  } else if (s.right){
+    right.appendChild(finTable(s.right));
+  }
+  g.appendChild(left); g.appendChild(right);
+  body.appendChild(g);
+  if (s.footnote) body.appendChild(el("div","fn", s.footnote));
+  host.appendChild(body);
+};
+
+kinds.callout = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area callout");
+  if (s.label) body.appendChild(el("div","lab", s.label));
+  body.appendChild(el("div","big " + toneClass(s.tone), typeof s.value === "string" ? s.value : num(s.value, s)));
+  if (s.context) body.appendChild(el("div","ctx", s.context));
+  host.appendChild(body);
+};
+
+/* ── charts ─────────────────────────────────────────────────────────── */
+function niceTicks(min, max, count){
+  if (min === max){ max = min + 1; }
+  const span = max - min, raw = span / count, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw / mag;
+  const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  const out = [];
+  for (let v = lo; v <= hi + step / 2; v += step) out.push(Math.abs(v) < step / 1e6 ? 0 : v);
+  return out;
+}
+
+kinds.chart = function(host, s, idx){
+  head(host, s, idx);
+  const body = el("div","body-area");
+  const series = (s.series || []).slice(0, 2);
+  const hues = ["var(--s1)","var(--s2)"];
+
+  if (series.length >= 2){
+    const lg = el("div","legend");
+    series.forEach((se, i) => {
+      const k = el("div","k");
+      const sw = el("i"); sw.style.background = hues[i];
+      k.appendChild(sw); k.appendChild(document.createTextNode(se.name));
+      lg.appendChild(k);
+    });
+    body.appendChild(lg);
+  }
+
+  const wrap = el("div","chartwrap");
+  const W = 1680, H = 520, M = { t:30, r:60, b:66, l:150 };
+  const pw = W - M.l - M.r, ph = H - M.t - M.b;
+  const g = svg("svg", { viewBox:"0 0 " + W + " " + H, preserveAspectRatio:"none" });
+  const cats = s.categories || [];
+  const all = series.flatMap(se => se.values).filter(v => typeof v === "number");
+  const lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+  const ticks = niceTicks(lo, hi, 4);
+  const tmin = ticks[0], tmax = ticks[ticks.length - 1];
+  const y = v => M.t + ph - ((v - tmin) / (tmax - tmin)) * ph;
+
+  ticks.forEach(t => {
+    g.appendChild(svg("line", { x1:M.l, x2:M.l + pw, y1:y(t), y2:y(t),
+      stroke:t === 0 ? "var(--line-strong)" : "var(--grid)", "stroke-width":1 }));
+    const lb = svg("text", { x:M.l - 26, y:y(t) + 8, "text-anchor":"end", class:"axv" });
+    lb.textContent = num(t, { format:s.format, unit:s.unit, dp:s.dp });
+    g.appendChild(lb);
+  });
+
+  const band = pw / Math.max(cats.length, 1);
+  const hlIdx = s.highlight !== undefined ? cats.indexOf(s.highlight) : -1;
+  const labelAt = i => i === hlIdx || (hlIdx < 0 && i === cats.length - 1);
+  /* Two series direct-labelled at the same category collide. Label the series
+     the slide is about (the first, unless labelSeries says otherwise) and let
+     the legend plus the axis carry the other. */
+  const labelSeries = s.labelSeries !== undefined ? s.labelSeries : 0;
+
+  cats.forEach((c, i) => {
+    const lb = svg("text", { x:M.l + band * (i + 0.5), y:M.t + ph + 44, "text-anchor":"middle",
+      class:"ax" + (i === hlIdx ? " hlx" : "") });
+    lb.textContent = c;
+    g.appendChild(lb);
+  });
+
+  if ((s.chartType || "bar") === "bar"){
+    const groupW = Math.min(band * 0.64, 190);
+    const barW = Math.min(56, (groupW - (series.length - 1) * 2) / Math.max(series.length, 1));
+    cats.forEach((c, i) => {
+      const x0 = M.l + band * (i + 0.5) - (barW * series.length + 2 * (series.length - 1)) / 2;
+      series.forEach((se, j) => {
+        const v = se.values[i];
+        if (typeof v !== "number") return;
+        const yv = y(v), y0 = y(0);
+        const top = Math.min(yv, y0), h = Math.max(Math.abs(y0 - yv), 2);
+        const x = x0 + j * (barW + 2);
+        const r = Math.min(8, barW / 3);
+        const up = v >= 0;
+        const d = up
+          ? "M" + x + "," + (top + h) + "V" + (top + r) + "a" + r + "," + r + " 0 0 1 " + r + ",-" + r
+            + "h" + (barW - 2 * r) + "a" + r + "," + r + " 0 0 1 " + r + "," + r + "V" + (top + h) + "Z"
+          : "M" + x + "," + top + "V" + (top + h - r) + "a" + r + "," + r + " 0 0 0 " + r + "," + r
+            + "h" + (barW - 2 * r) + "a" + r + "," + r + " 0 0 0 " + r + ",-" + r + "V" + top + "Z";
+        g.appendChild(svg("path", { d:d, fill:hues[j] }));
+        if (labelAt(i) && j === labelSeries){
+          const t = svg("text", { x:x + barW / 2, y:up ? top - 18 : top + h + 38, "text-anchor":"middle", class:"dl" });
+          t.textContent = num(v, { format:s.format, unit:s.unit, dp:s.dp });
+          g.appendChild(t);
+        }
+      });
+    });
+  } else {
+    series.forEach((se, j) => {
+      const pts = [];
+      se.values.forEach((v, i) => {
+        if (typeof v === "number") pts.push([M.l + band * (i + 0.5), y(v), i, v]);
+      });
+      if (!pts.length) return;
+      g.appendChild(svg("path", {
+        d:"M" + pts.map(p => p[0] + "," + p[1]).join("L"),
+        fill:"none", stroke:hues[j], "stroke-width":4,
+        "stroke-linejoin":"round", "stroke-linecap":"round",
+        "stroke-dasharray": se.projected ? "14 10" : null }));
+      const last = pts[pts.length - 1];
+      g.appendChild(svg("circle", { cx:last[0], cy:last[1], r:9, fill:hues[j],
+        stroke:"var(--bg)", "stroke-width":3 }));
+      const t = svg("text", { x:last[0] + 22, y:last[1] + 9, class:"dl" });
+      t.textContent = num(last[3], { format:s.format, unit:s.unit, dp:s.dp });
+      g.appendChild(t);
+      pts.forEach(p => { if (labelAt(p[2]) && p !== last && j === labelSeries){
+        g.appendChild(svg("circle", { cx:p[0], cy:p[1], r:9, fill:hues[j], stroke:"var(--bg)", "stroke-width":3 }));
+        const lt = svg("text", { x:p[0], y:p[1] - 26, "text-anchor":"middle", class:"dl" });
+        lt.textContent = num(p[3], { format:s.format, unit:s.unit, dp:s.dp });
+        g.appendChild(lt);
+      }});
+    });
+  }
+
+  wrap.appendChild(g);
+  body.appendChild(wrap);
+  if (s.takeaway){
+    const tk = el("div","takeaway");
+    tk.appendChild(el("b", null, "What to see: "));
+    tk.appendChild(document.createTextNode(s.takeaway));
+    body.appendChild(tk);
+  }
+  host.appendChild(body);
+};
+
+/* ── build ──────────────────────────────────────────────────────────── */
+let page = 0;
+(deck.slides || []).forEach((s, i) => {
+  const host = el("div","slide");
+  host.dataset.kind = s.kind;
+  const fn = kinds[s.kind];
+  if (!fn){
+    host.appendChild(el("h1","headline", "Unknown slide kind: " + s.kind));
+  } else {
+    fn(host, s, i);
+  }
+  if (s.kind !== "cover"){ page += 1; foot(host, s, page); }
+  document.body.appendChild(host);
+});
+
+/* ── overflow detector ──────────────────────────────────────────────────
+   The renderer will not wrap, shrink or error on an overrun - it draws
+   straight over the footer. This measures every slide after layout and
+   flags the ones that overflowed, so `--dump-dom | grep data-overflow`
+   is a real gate before you print.                                      */
+window.__DECK_OVERFLOW = [];
+document.querySelectorAll(".slide").forEach((sl, i) => {
+  const box = sl.getBoundingClientRect(), cs = getComputedStyle(sl);
+  const top = box.top + parseFloat(cs.paddingTop);
+  const bottom = box.bottom - parseFloat(cs.paddingBottom);
+  const area = sl.querySelector(".body-area");
+  let over = false;
+  if (area && (area.scrollHeight > area.clientHeight + 1 || area.scrollWidth > area.clientWidth + 1)) over = true;
+  const nodes = area ? area.children
+    : sl.querySelectorAll(":scope > *:not(.foot):not(.ovf)");
+  Array.prototype.forEach.call(nodes, n => {
+    const b = n.getBoundingClientRect();
+    if (b.bottom > bottom + 1 || b.top < top - 1) over = true;
+  });
+  if (sl.dataset.dropped) over = true;
+  /* A chart does not overflow vertically when it has too many categories -
+     its x-labels silently overprint each other instead. Measure them. */
+  sl.querySelectorAll(".chartwrap svg").forEach(g => {
+    const ax = Array.prototype.slice.call(g.querySelectorAll("text.ax"))
+      .map(n => n.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+    for (let k = 1; k < ax.length; k++) if (ax[k].left < ax[k - 1].right + 8) over = true;
+  });
+  if (over){
+    sl.dataset.overflow = "true";
+    sl.appendChild(el("div","ovf","OVERFLOW · SLIDE " + (i + 1)));
+    window.__DECK_OVERFLOW.push({ index:i + 1, kind:sl.dataset.kind,
+      dropped:sl.dataset.dropped || 0,
+      headline:(sl.querySelector(".headline") || {}).textContent || "" });
+  }
+});
+if (window.__DECK_OVERFLOW.length) console.error("DECK OVERFLOW", window.__DECK_OVERFLOW);
+})();
+</script>
+</body>
+</html>
