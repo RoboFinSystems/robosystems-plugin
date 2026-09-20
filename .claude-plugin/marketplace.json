@@ -10,7 +10,7 @@
       "name": "robosystems",
       "source": "./",
       "displayName": "RoboSystems",
-      "description": "Accounting and financial-reporting knowledge graphs over MCP \u2014 SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor portfolios \u2014 plus skills for SEC filing analysis, month-end close, and graph exploration.",
+      "description": "Accounting and financial-reporting knowledge graphs over MCP \u2014 SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor portfolios \u2014 plus skills for SEC filing analysis, month-end close, board reporting, and graph exploration.",
       "version": "1.0.0",
       "category": "productivity",
       "keywords": [
