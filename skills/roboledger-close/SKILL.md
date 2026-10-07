@@ -5,8 +5,9 @@ description: >-
   server — orient on the fiscal calendar, clear sync and reconciling-item blockers,
   draft schedule-driven adjusting entries, review, close the period, and verify the
   receipt. Use for "close the books", "close July", "what's blocking the close",
-  "set up depreciation schedules", "month-end", "period close", or any request to
-  post, review, or reopen a fiscal period on a RoboLedger graph.
+  "set up depreciation schedules", "month-end", "period close", "close Maple
+  Court", or any request to post, review, or reopen a fiscal period on a
+  RoboLedger graph, for the group parent or for one subsidiary of a reporting group.
 ---
 
 # Month-end close on RoboLedger
@@ -23,11 +24,27 @@ are connected to — the exact tool sequence, parameter shapes, and gotchas for
 document: it captures tenant-specific accounts and quirks the generic playbook
 cannot, and it takes precedence where they differ.
 
+## Which company
+
+A graph is one **reporting group**: the group parent and the subsidiaries under
+it, each with its own books, chart of accounts, calendar and close. The server's
+`instructions` name them at the handshake, and `get-graph-info` lists them with
+their ids. Every close tool (`get-fiscal-calendar`, `get-period-close-status`,
+`list-period-drafts`, `promote-obligations`, `close-period`, `reopen-period`)
+and every ledger write take `entity_id`; omitted, they act on the group parent.
+To close a subsidiary, pass its `entity_id` on **every** call of the sequence —
+its siblings stay open, and a close with no `entity_id` closes the parent. When
+the user names a company, resolve it to its id once and carry the id through;
+a graph with one entity needs none of this. `create-entity` adds a subsidiary
+(name, legal form, the share the parent holds, an optional ticker); it gets a
+chart of accounts from a template and a calendar on the group's cadence.
+
 ## Orient (every close)
 
-1. `get-fiscal-calendar` — read `closed_through` (the watermark), `close_target`,
-   `closeable_now`, `blockers`, `catch_up_sequence`. The period you close is
-   exactly `closed_through + 1`; closes run in order.
+1. `get-fiscal-calendar` (with `entity_id` for a subsidiary) — read
+   `closed_through` (the watermark), `close_target`, `closeable_now`,
+   `blockers`, `catch_up_sequence`. The period you close is exactly
+   `closed_through + 1`; closes run in order, per entity.
 2. `get-period-close-status` (`period_start`/`period_end` as `YYYY-MM-DD`) —
    which schedules are pending / drafted / posted, and the amounts.
 3. `get-graph-sync-status` — freshness of the source connection (QuickBooks) and
@@ -78,6 +95,12 @@ stale for the analytical rebuild — poll `get-graph-sync-status` until
 month. If the tenant runs forecasts, re-run `compute-forecast` for each forecast
 block; the actuals/forecast seam advances by itself.
 
+A subsidiary's close stamps that subsidiary's statements. The group's view is
+`live-financial-statement` on the group parent with `consolidated=true`: every
+entity's books summed per concept under the parent's Reporting Style —
+**combined, not consolidated**, nothing is eliminated between the companies —
+and a company whose chart is not mapped yet is left out of it.
+
 ## Setting up the first close (schedules)
 
 - Discover the recurring entries two ways: derive amounts from a prior posted
@@ -102,6 +125,10 @@ block; the actuals/forecast seam advances by itself.
 - `list-period-drafts` and `close-period` take `period='YYYY-MM'`;
   `get-period-close-status` takes `period_start`/`period_end='YYYY-MM-DD'`;
   schedule payload dates are `YYYY-MM-DD`.
+- `entity_id` is the entity's id from `get-graph-info` (`ent_…`, or
+  `entity_<graph_id>` for a parent created with its graph), never its name or
+  ticker. One entity per call: a schedule, a draft and a close each belong to
+  exactly one company.
 - Only `schedule` and `rollforward` are constructible via
   `create-information-block`; statements are built with `create-report`.
 - On a shared repository none of this exists — there is no ledger to close.

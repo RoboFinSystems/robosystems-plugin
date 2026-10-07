@@ -36,7 +36,15 @@ that gate and print the deck.
 3. `search-documents` for the company's own "board pack" / "board reporting"
    document. A tenant that has one has already decided what its board sees; it
    takes precedence over the default arc below.
-4. Then ask the user, in **one** turn: which period, who is in the room, and the
+4. **Which company.** A graph is one reporting group (`get-graph-info` lists
+   the group parent and its subsidiaries). A pack is for one entity or for the
+   group. One entity: pass its `entity_id` on every read — calendar, close
+   status, drafts, statements — and name it in the file. The group: the
+   statements are the parent's with `consolidated: true` (every company summed
+   per concept, nothing eliminated — say so on the cover), and the attestation
+   carries one line per company, since each closes on its own calendar. A
+   graph with one entity skips this step.
+5. Then ask the user, in **one** turn: which period, who is in the room, and the
    two or three decisions they want out of the meeting. The asks shape the pack
    — a deck that does not end in a decision is a status report.
 
@@ -47,10 +55,10 @@ exercises the whole platform rather than one statement endpoint.
 
 | Slide | Tool | Notes |
 |---|---|---|
-| Cover attestation | `get-fiscal-calendar`, `get-graph-sync-status` | Closed through, close receipt, source freshness, unresolved reconciling items. This is the pack's audit trail — put it on page 1, not in an appendix. |
+| Cover attestation | `get-fiscal-calendar`, `get-graph-sync-status` | Closed through, close receipt, source freshness, unresolved reconciling items. This is the pack's audit trail — put it on page 1, not in an appendix. On a group pack, `get-fiscal-calendar` once per company with its `entity_id`. |
 | Entity, ledger scale | `query-graphql` → `entity`, `summary` | Legal name for the cover; `transactionCount` / `entryCount` / `earliestTransactionDate` for the provenance appendix. |
 | KPI scoreboard | `list-information-blocks` (`block_type='metric'`) → `get-information-block` | Metric blocks carry the standing series, one FactSet per period, so the deltas are the ledger's own, not arithmetic you did in your head. No metric blocks yet? Derive from the statements and say so in the source line. |
-| P&L, balance sheet, cash flow | `live-financial-statement` | `statement_type` is `income_statement` \| `balance_sheet` \| `cash_flow_statement`; pass explicit `period_start`/`period_end` for the closed period. Returns current + prior. **Read the `validation` block** (see below). |
+| P&L, balance sheet, cash flow | `live-financial-statement` | `statement_type` is `income_statement` \| `balance_sheet` \| `cash_flow_statement`; pass explicit `period_start`/`period_end` for the closed period. Returns current + prior. **Read the `validation` block** (see below). `entity_id` for one subsidiary; `consolidated: true` on the group parent for the group pack — its `combined_entity_ids` says which companies were summed, and a company with no mapping yet is silently absent. |
 | Actuals against plan, and the trend | `get-information-block` with `series: true` and `scenario_id` | One column per period, crossing the actuals→forecast seam; forecast columns carry `periods[].forecast = true`. This is the single most useful call in the pack — it gives you the P&L-versus-plan slide and the forward view from one read. Window it with `series_history` / `series_forecast` on an old ledger. |
 | Multi-period trend for a chart | `build-fact-grid` | Graph-backed, so it needs the ledger materialized. On a graph that is not, take the trend from the statement series instead. |
 | Prior filed reports | `query-graphql` → `reports`, `statement(reportId:, blockType:)` | Ties the pack back to what was presented last quarter. |

@@ -16,7 +16,7 @@ Accounting and financial-reporting knowledge graphs for coding agents. This plug
 |---|---|
 | `robosystems` | Orientation — what the connection is scoped to, which tool family answers an intent, how to explore a graph (schema → example queries → GraphQL or Cypher) and the Cypher rules that matter |
 | `sec-filing-analysis` | Statements by ticker or CIK, cross-period and cross-company comparisons, concept → XBRL element, full-text search over 10-K/10-Q narrative |
-| `roboledger-close` | Month-end close: orient, clear blockers, draft schedule-driven entries, review, close, verify — and how to set up schedules for a first close |
+| `roboledger-close` | Month-end close: orient, clear blockers, draft schedule-driven entries, review, close, verify — for the group parent or one subsidiary of a reporting group — and how to set up schedules for a first close |
 | `roboledger-board-pack` | A board presentation from your ledger: pull the closed period, verify it against its guard rails, render a deck to HTML and PDF, then revise the operating plan from what the board decides |
 
 ## Install
