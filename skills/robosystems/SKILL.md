@@ -25,13 +25,20 @@ One authorization is **one graph**. The consent screen picks it, and the server'
 | Graph | What it is | Tools |
 |---|---|---|
 | `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | 10 analytical tools; Cypher, no GraphQL |
-| A RoboLedger graph (`kg…`) | A customer's general ledger: fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | ~85 tools |
+| A RoboLedger graph (`kg…`) | A customer's general ledger — one reporting group: the group parent and any subsidiaries, each with its own books, chart, calendar and close. Fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | ~85 tools |
 | A RoboInvestor graph | Portfolios, securities, positions alongside the ledger. | ledger set + portfolio tools |
 | A subgraph (`kg…_name`) | A workspace hanging off a parent graph; writable Cypher lives here. | parent's set, no memory |
 
 To work on a different graph, reconnect and pick it — there is no switch tool.
 Shared repositories never accept writes; on a customer's graph, writes are limited
 by the role the user already holds.
+
+A ledger graph is one **reporting group**. The handshake's `instructions` name
+the group parent and each subsidiary with its id, and `get-graph-info` lists
+them. Every ledger tool takes `entity_id`; omitted, it acts on the group parent,
+so a graph with one company needs no entity at all. A subsidiary's books, chart,
+calendar and close are its own — name its `entity_id` on every call about it.
+`create-entity` adds one. Counterparties, documents and memory are the group's.
 
 Connection is OAuth 2.1 at `https://api.robosystems.ai/v1/mcp`; the client runs
 the consent flow the first time a tool is called. An account with no graph yet is
@@ -41,7 +48,10 @@ told to create one at robosystems.ai first.
 
 - **A company's financial statements** → `financial-statement-analysis` (SEC:
   by ticker; a ledger graph after materialization: by report). Current books on
-  a ledger graph → `live-financial-statement`.
+  a ledger graph → `live-financial-statement` — `entity_id` for a subsidiary;
+  `consolidated: true` on the group parent for the whole group, which is a
+  combined statement (summed per concept, nothing eliminated), not a
+  consolidation.
 - **Compare specific metrics across periods or companies** → `build-fact-grid`.
 - **Find the XBRL element for a concept** ("revenue", "total debt") → `resolve-element`.
 - **Narrative: MD&A, risk factors, policies, the tenant's own procedure docs** →
