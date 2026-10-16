@@ -34,7 +34,7 @@ The first tool call opens the browser for the OAuth consent screen, where you si
 
 **Cursor** — install from the [Cursor Marketplace](https://cursor.com/marketplace) once listed (**Customize → Plugins**), or test it locally by copying this repository to `~/.cursor/plugins/local/robosystems` and running **Developer: Reload Window**. The `.cursor-plugin/` manifest points at the same server and skills.
 
-**Any MCP client** — the server is `https://api.robosystems.ai/v1/mcp` (Streamable HTTP, OAuth 2.1 with PKCE, discovery via RFC 9728 / RFC 8414). Per-graph URLs with an API key are also available; see the [MCP guide](https://github.com/RoboFinSystems/robosystems/wiki/AI-Operators-and-MCP).
+**Any MCP client** — the server is `https://api.robosystems.ai/v1/mcp` (Streamable HTTP, OAuth 2.1 with PKCE, discovery via RFC 9728 / RFC 8414). Per-graph URLs with an API key are also available; see the [MCP guide](https://robosystems.ai/docs/technical/ai-operators-and-mcp).
 
 ## Requirements
 
