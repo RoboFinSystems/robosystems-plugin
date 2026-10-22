@@ -26,9 +26,11 @@ many exploratory ones.
    facts). Returns deduplicated consolidated facts ordered by period, plus the
    `resolved_report`. Start here for "show me X's statement".
 2. **`build-fact-grid`** — *specific* elements across any mix of periods and
-   entities. Use `canonical_concepts` (`revenue`, `net_income`, `total_assets`,
-   …) rather than raw qnames so cross-filer tagging differences collapse
-   (`us-gaap:Revenues` vs `us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax`).
+   entities. Pass each company's own qnames as `elements`: filers tag the same
+   concept differently (`us-gaap:Revenues` vs
+   `us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax`), so run
+   `resolve-element` with each `ticker` and check the labels first.
+   `canonical_concepts` is a rough grouping for discovery, not for a number.
    Set `period_type` for duration concepts, `entities` for multi-company
    comparisons, and raise `limit` when `truncated` comes back true. This is the
    tool for "compare A and B" and "trend over N periods".
@@ -47,13 +49,14 @@ many exploratory ones.
 
 ## Cypher patterns that work here
 
-Consolidated revenue for one company, cross-filer robust:
+Consolidated revenue for one company, under either revenue tag:
 
 ```cypher
 MATCH (f:Fact {has_dimensions: false})-[:FACT_HAS_ELEMENT]->(e:Element),
       (f)-[:FACT_HAS_ENTITY]->(ent:Entity {ticker: 'NVDA'}),
       (f)-[:FACT_HAS_PERIOD]->(p:Period {duration_type: 'annual'})
-WHERE e.canonical_concept = 'revenue' AND f.numeric_value IS NOT NULL
+WHERE e.qname IN ['us-gaap:Revenues', 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax']
+  AND f.numeric_value IS NOT NULL
 RETURN ent.ticker, e.qname, p.end_date, f.numeric_value AS revenue
 ORDER BY p.end_date DESC LIMIT 10
 ```
@@ -84,8 +87,11 @@ RETURN d.axis_uri, d.member_uri, f.numeric_value LIMIT 10
 
 - **Consolidated vs dimensional.** `has_dimensions: false` is the consolidated
   total; `true` is a segment/geography/member breakdown. Mixing them double-counts.
-- **Canonical concepts over qnames.** `Element.canonical_concept` normalizes the
-  tag zoo; `resolve-element` tells you which qnames map to it for a given filer.
+- **Name each filer's elements.** Filers tag the same concept differently;
+  `resolve-element` with a `ticker` lists that filer's qnames with labels. Check
+  the labels and filter `e.qname IN [...]`. `Element.canonical_concept` is a
+  rough grouping that can hold elements that are not the concept, so never
+  compute a number from it.
 - **Periods.** Income-statement and cash-flow facts are `duration` with a
   `duration_type`; balance-sheet facts are `instant`. Filter accordingly or you
   get an empty or mixed result.
@@ -104,9 +110,11 @@ RETURN d.axis_uri, d.member_uri, f.numeric_value LIMIT 10
 
 "Compare NVIDIA's gross margin across its last eight quarters":
 
-1. `build-fact-grid` with `entity: NVDA`, `canonical_concepts:
-   [revenue, cost_of_revenue]`, `period_type: quarterly`, `limit: 40`.
-2. Compute margin per period from the returned pairs; note any period where a
+1. `resolve-element` for "revenue" and "cost of revenue" with `ticker: NVDA`;
+   keep the qnames whose labels fit.
+2. `build-fact-grid` with `entity: NVDA`, those qnames as `elements`,
+   `period_type: quarterly`, `limit: 40`.
+3. Compute margin per period from the returned pairs; note any period where a
    10-K annual fact stands in for a quarter (annual filers report Q4 implicitly).
-3. If the trend needs explanation, `search-documents` with `entity: NVDA`,
+4. If the trend needs explanation, `search-documents` with `entity: NVDA`,
    `section: item_7`, query "gross margin" — and cite the section.
