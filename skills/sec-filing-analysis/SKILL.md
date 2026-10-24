@@ -30,7 +30,8 @@ many exploratory ones.
    concept differently (`us-gaap:Revenues` vs
    `us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax`), so run
    `resolve-element` with each `ticker` and check the labels first.
-   `canonical_concepts` is a rough grouping for discovery, not for a number.
+   `canonical_concepts` reaches standard us-gaap and ifrs-full elements only,
+   so it misses a filer that reports the line under its own extension.
    Set `period_type` for duration concepts, `entities` for multi-company
    comparisons, and raise `limit` when `truncated` comes back true. This is the
    tool for "compare A and B" and "trend over N periods".
@@ -62,7 +63,9 @@ ORDER BY p.end_date DESC LIMIT 10
 ```
 
 A whole statement via the presentation structure — anchor on the entity, reach
-`Structure` last:
+`Structure` last. A filing that presents one combined statement of operations
+and comprehensive income classifies it `comprehensive_income`, so try that when
+`income_statement` comes back empty:
 
 ```cypher
 MATCH (ent:Entity {ticker: 'NVDA'})<-[:FACT_HAS_ENTITY]-(f:Fact {has_dimensions: false})-[:FACT_HAS_ELEMENT]->(e:Element),
@@ -89,9 +92,10 @@ RETURN d.axis_uri, d.member_uri, f.numeric_value LIMIT 10
   total; `true` is a segment/geography/member breakdown. Mixing them double-counts.
 - **Name each filer's elements.** Filers tag the same concept differently;
   `resolve-element` with a `ticker` lists that filer's qnames with labels. Check
-  the labels and filter `e.qname IN [...]`. `Element.canonical_concept` is a
-  rough grouping that can hold elements that are not the concept, so never
-  compute a number from it.
+  the labels and filter `e.qname IN [...]`. `Element.canonical_concept` labels
+  standard us-gaap and ifrs-full elements only, from a curated table; a filer
+  that reports the line under its own extension is missing from it, so name the
+  qnames and return `e.qname` beside each value.
 - **Periods.** Income-statement and cash-flow facts are `duration` with a
   `duration_type`; balance-sheet facts are `instant`. Filter accordingly or you
   get an empty or mixed result.
