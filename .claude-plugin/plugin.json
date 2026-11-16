@@ -2,7 +2,7 @@
   "name": "robosystems",
   "displayName": "RoboSystems",
   "version": "1.0.0",
-  "description": "Accounting and financial-reporting knowledge graphs over MCP — SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor portfolios — plus skills for SEC filing analysis, month-end close, board reporting, and graph exploration.",
+  "description": "RoboSystems, the open-source knowledge graph for finance, over MCP: your general ledger and 8,000+ public companies' XBRL filings as traceable data, plus skills for SEC filing analysis, month-end close, board packs and graph exploration.",
   "author": {
     "name": "RoboSystems",
     "url": "https://robosystems.ai"

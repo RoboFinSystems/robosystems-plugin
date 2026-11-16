@@ -2,7 +2,7 @@
 name: roboledger-board-pack
 description: >-
   Build a board presentation from a RoboLedger graph over the RoboSystems MCP
-  server — pull the closed period's statements, KPIs, working capital and
+  server: pull the closed period's statements, KPIs, working capital and
   operating plan, verify every figure against its guard rails, render a
   self-contained HTML deck and print it to PDF, then revise the plan from what
   the board decides. Use for "board deck", "board pack", "board meeting",

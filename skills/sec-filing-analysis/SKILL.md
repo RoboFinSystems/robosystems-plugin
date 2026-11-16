@@ -2,7 +2,7 @@
 name: sec-filing-analysis
 description: >-
   Analyze a public company from its SEC EDGAR XBRL filings on the RoboSystems `sec`
-  graph — statements by ticker or CIK, cross-period and cross-company metric
+  graph: statements by ticker or CIK, cross-period and cross-company metric
   comparisons, concept-to-element resolution, and full-text search over 10-K/10-Q
   narrative. Use for questions like "show me NVIDIA's income statement", "compare
   gross margin across the last eight quarters", "which filers mention goodwill
