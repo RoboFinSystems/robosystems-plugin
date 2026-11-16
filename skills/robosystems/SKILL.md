@@ -1,7 +1,8 @@
 ---
 name: robosystems
 description: >-
-  Orientation for the RoboSystems MCP server — accounting and financial-reporting
+  Orientation for the RoboSystems MCP server, the open-source knowledge graph for
+  finance: accounting and financial-reporting
   knowledge graphs (SEC EDGAR XBRL filings, RoboLedger general ledgers, RoboInvestor
   portfolios). Use whenever "RoboSystems", "RoboLedger", "RoboInvestor", the `sec`
   graph, or a `kg…` graph id is mentioned, to understand what the connection is

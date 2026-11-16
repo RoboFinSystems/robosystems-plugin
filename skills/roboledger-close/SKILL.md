@@ -2,7 +2,7 @@
 name: roboledger-close
 description: >-
   Run or set up a month-end close on a RoboLedger graph over the RoboSystems MCP
-  server — orient on the fiscal calendar, clear sync and reconciling-item blockers,
+  server: orient on the fiscal calendar, clear sync and reconciling-item blockers,
   draft schedule-driven adjusting entries, review, close the period, and verify the
   receipt. Use for "close the books", "close July", "what's blocking the close",
   "set up depreciation schedules", "month-end", "period close", "close Maple
