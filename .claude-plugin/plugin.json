@@ -8,6 +8,7 @@
     "url": "https://robosystems.ai"
   },
   "homepage": "https://robosystems.ai",
+  "privacyPolicyUrl": "https://robosystems.ai/pages/privacy",
   "repository": "https://github.com/RoboFinSystems/robosystems-plugin",
   "license": "Apache-2.0",
   "keywords": ["robosystems", "roboledger", "roboinvestor", "accounting", "sec", "edgar", "xbrl", "quickbooks", "financial-reporting", "knowledge-graph", "mcp"]
