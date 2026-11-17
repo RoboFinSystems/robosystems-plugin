@@ -7,7 +7,8 @@ description: >-
   receipt. Use for "close the books", "close July", "what's blocking the close",
   "set up depreciation schedules", "month-end", "period close", "close Maple
   Court", or any request to post, review, or reopen a fiscal period on a
-  RoboLedger graph, for the group parent or for one subsidiary of a reporting group.
+  RoboLedger graph, for the group parent or for one subsidiary of a reporting group,
+  or to close the group itself.
 ---
 
 # Month-end close on RoboLedger
@@ -55,7 +56,10 @@ chart of accounts from a template and a calendar on the group's cadence.
 | Blocker | Meaning | Action |
 |---|---|---|
 | `sync_stale` | Source sync is older than the period end | `sync-connection` (incremental; pass `since_date` if edits are older than ~60 days), then poll `get-graph-sync-status` / `get-fiscal-calendar` until it clears. Prefer this over `allow_stale_sync=true`. |
-| reconciling items > 0 | Transactions edited upstream after they synced — normal, not an alarm | `list-event-blocks` with `is_reconciling_item=true`; for each, `preview-reconciling-item`, agree a disposition with the user, then `resolve-reconciling-item`: **RESTATE** (regenerate in place; prior months change; default inside the fiscal year), **CATCH_UP** (post the difference in an open period; prior statements stand), or **ACKNOWLEDGE** (already handled by an entry you authored). Never close over unreviewed items. |
+| `reconciling_items` | Transactions edited upstream after they synced — normal, not an alarm | `list-event-blocks` with `is_reconciling_item=true`; for each, `preview-reconciling-item`, agree a disposition with the user, then `resolve-reconciling-item`: **RESTATE** (regenerate in place; prior months change; default inside the fiscal year), **CATCH_UP** (post the difference in an open period; prior statements stand), or **ACKNOWLEDGE** (already handled by an entry you authored). Never close over unreviewed items. |
+| `unposted_source_events` | Source events dated in the month never committed: inbox lines still captured or classified, or a QuickBooks transaction whose posting failed | Commit or void each; once the month closes they can never post into it. |
+| `unreconciled_accounts` | A reconciliation the close waits on is not reconciled for the month | `list-reconciliations` for each one's standing; `refresh-reconciliations` to compare again; a statement account needs `record-statement-balance` with the period's statement; one awaiting review needs `sign-off-reconciliation` — the user's decision, so ask. |
+| `unmapped_accounts` | An account with postings maps to no reporting concept, so its balance is in no statement | `suggest-mapping`, then `create-mapping-association`. Nothing lifts this gate. |
 | `pending_obligations` / `stranded_obligations` | Matured schedule obligations not yet drafted | `promote-obligations` with `dispatch_handlers=true`; if they belong to a pre-watermark month, the schedule's `closed_through` was set wrong. |
 | `sequence_violation`, `period_incomplete`, `calendar_not_initialized` | Out of order, month not over, no calendar | Close the earlier period, wait, or initialize the calendar. |
 
@@ -95,11 +99,32 @@ stale for the analytical rebuild — poll `get-graph-sync-status` until
 month. If the tenant runs forecasts, re-run `compute-forecast` for each forecast
 block; the actuals/forecast seam advances by itself.
 
-A subsidiary's close stamps that subsidiary's statements. The group's view is
-`live-financial-statement` on the group parent with `consolidated=true`: every
-entity's books summed per concept under the parent's Reporting Style —
-**combined, not consolidated**, nothing is eliminated between the companies —
-and a company whose chart is not mapped yet is left out of it.
+A subsidiary's close stamps that subsidiary's statements.
+
+## The group close
+
+On a group with a consolidation entity (the handshake names it; the
+consolidating entries post there), the group's month closes last:
+
+1. Close the month for every entity first — the parent, each member, an
+   equity-method member too.
+2. `propose-consolidation-entries` (`period` as `YYYY-MM`) drafts the month's
+   consolidating entries; `preview-consolidation-entries` shows them without
+   writing, and `consolidation-worksheet` lays the group out by entity to check
+   them. Review with the user as for any draft.
+3. `close-period` with the consolidation entity's `entity_id`. That close is
+   the group's: it refuses while an entity is open (`entity_open`), the
+   consolidating entries are neither posted nor drafted
+   (`adjustments_unposted`), a residual or intercompany difference is left
+   unexplained (`residual_unexplained`), or the consolidated statements do not
+   foot (`consolidated_does_not_foot`).
+
+To change a member's month after the group has closed it, reopen the group's
+month first. The group's statements are `live-financial-statement` on the group
+parent with `scope: consolidated` — the members plus the consolidation entity's
+eliminations and noncontrolling interest; `scope: combined` is the members
+summed with nothing eliminated. A company whose chart is not mapped yet is left
+out of both.
 
 ## Setting up the first close (schedules)
 

@@ -8,15 +8,15 @@ Part of [RoboSystems](https://robosystems.ai), the open-source knowledge graph f
 |---|---|---|
 | `sec` (SEC EDGAR Filings) | Public-company XBRL filings as a read-only knowledge graph | analytical set |
 | Your RoboLedger graph | RoboLedger, the general ledger built on RoboSystems, with XBRL-grade reporting: fiscal calendar and period close, journal entries, live statements, forecasts, chart-of-accounts mapping, documents, memory. Connect QuickBooks Online, or keep the books here, fed by bank feeds. | full set; writes limited by your role |
-| Your RoboInvestor graph | Portfolios, securities and positions alongside the ledger | ledger set + portfolio tools |
+| Your RoboInvestor graph | Portfolios, securities and positions | portfolio tools; the ledger set too when the graph also carries RoboLedger |
 
 **Skills**
 
 | Skill | Use it for |
 |---|---|
 | `robosystems` | Orientation: what the connection is scoped to, which tool family answers an intent, how to explore a graph (schema → example queries → GraphQL or Cypher) and the Cypher rules that matter |
-| `sec-filing-analysis` | Statements by ticker or CIK, cross-period and cross-company comparisons, concept → XBRL element, full-text search over 10-K/10-Q narrative |
-| `roboledger-close` | Month-end close (orient, clear blockers, draft schedule-driven entries, review, close, verify) for the group parent or one subsidiary of a reporting group, and how to set up schedules for a first close |
+| `sec-filing-analysis` | Statements by ticker or CIK, cross-period and cross-company comparisons, concept → XBRL element, one disclosure section read whole, and search over 10-K/10-Q narrative and one filing's own text, 8-K earnings releases included |
+| `roboledger-close` | Month-end close (orient, clear blockers, draft schedule-driven entries, review, close, verify) for the group parent or one subsidiary of a reporting group, then the group close, and how to set up schedules for a first close |
 | `roboledger-board-pack` | A board presentation from your ledger: pull the closed period, verify it against its guard rails, render a deck to HTML and PDF, then revise the operating plan from what the board decides |
 
 ## Install

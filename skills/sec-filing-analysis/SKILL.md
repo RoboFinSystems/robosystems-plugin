@@ -3,10 +3,12 @@ name: sec-filing-analysis
 description: >-
   Analyze a public company from its SEC EDGAR XBRL filings on the RoboSystems `sec`
   graph: statements by ticker or CIK, cross-period and cross-company metric
-  comparisons, concept-to-element resolution, and full-text search over 10-K/10-Q
-  narrative. Use for questions like "show me NVIDIA's income statement", "compare
-  gross margin across the last eight quarters", "which filers mention goodwill
-  impairment", or any request that names a ticker, CIK, 10-K, 10-Q, or XBRL concept.
+  comparisons, concept-to-element resolution, one disclosure section read whole,
+  and full-text search over 10-K/10-Q narrative and one filing's own text,
+  8-K earnings releases included. Use for questions like "show me NVIDIA's
+  income statement", "compare gross margin across the last eight quarters",
+  "which filers mention goodwill impairment", or any request that names a
+  ticker, CIK, 10-K, 10-Q, 8-K, or XBRL concept.
 ---
 
 # SEC filing analysis on the `sec` graph
@@ -38,14 +40,28 @@ many exploratory ones.
 3. **`resolve-element`** — map a concept in words to the qnames actually used,
    with fact counts and a ready-to-run `query_hint`. Call it before writing
    Cypher that filters on an element.
-4. **`search-documents`** — BM25 keyword search across filing narrative and
+4. **`disclosures`** → **`information-block`** — one section of a filing read
+   whole. `disclosures` (by `ticker`) is the cheap map: one row per note or
+   statement, or with `topic` one family's blocks and their ids.
+   `information-block` reads one block: rows in filing order, the breakdowns
+   by its own axes, the calculation footing, the text blocks. It is the
+   expensive call — one block per call, found through `disclosures` first.
+   Use it for "how does long-term debt break down" or "does the tax rate
+   reconciliation foot".
+5. **`search-documents`** — BM25 keyword search across filing narrative and
    iXBRL disclosure sections; `semantic: true` adds vector ranking. Filter with
    `entity`, `form_type`, `fiscal_year`, `section` (`item_1a`, `item_7`, …) or
    `element` (find disclosures carrying a given XBRL fact). Follow a hit with
    **`get-document-section`** for the full text; iXBRL hits carry
    `xbrl_elements` you can hand to `resolve-element` — the bridge from narrative
-   back to numbers.
-5. **`read-graph-cypher`** — when the shaped tools don't fit. Always run
+   back to numbers. It finds *which* filings discuss something.
+6. **`search-text`** → **`read-text`** — *where* one filing says something, in
+   its whole text as filed: cover page, footnotes, exhibits. Pass `ticker`
+   (`form: '8-K'` for the latest earnings release with its exhibits, or
+   `accession` for one filing); `read-text` pages on from a hit's `offset`.
+   `describe-filing` maps the filing's Items with their offsets, to read a
+   whole Item such as MD&A.
+7. **`read-graph-cypher`** — when the shaped tools don't fit. Always run
    `get-example-queries` first; the patterns below are the ones that matter.
 
 ## Cypher patterns that work here
@@ -58,7 +74,7 @@ MATCH (f:Fact {has_dimensions: false})-[:FACT_HAS_ELEMENT]->(e:Element),
       (f)-[:FACT_HAS_PERIOD]->(p:Period {duration_type: 'annual'})
 WHERE e.qname IN ['us-gaap:Revenues', 'us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax']
   AND f.numeric_value IS NOT NULL
-RETURN ent.ticker, e.qname, p.end_date, f.numeric_value AS revenue
+RETURN ent.ticker, e.qname, p.end_date, f.value AS revenue
 ORDER BY p.end_date DESC LIMIT 10
 ```
 
@@ -73,7 +89,7 @@ MATCH (ent:Entity {ticker: 'NVDA'})<-[:FACT_HAS_ENTITY]-(f:Fact {has_dimensions:
       (fs:FactSet)-[:FACT_SET_CONTAINS_FACT]->(f),
       (s:Structure {canonical_type: 'income_statement'})-[:STRUCTURE_HAS_FACT_SET]->(fs)
 WHERE f.numeric_value IS NOT NULL
-RETURN DISTINCT e.qname, f.numeric_value AS value, p.end_date
+RETURN DISTINCT e.qname, f.value AS value, p.end_date
 ORDER BY p.end_date DESC LIMIT 40
 ```
 
@@ -83,7 +99,7 @@ Segment breakdowns — flip the dimension flag:
 MATCH (f:Fact {has_dimensions: true})-[:FACT_HAS_ELEMENT]->(e:Element),
       (f)-[:FACT_HAS_DIMENSION]->(d:Dimension)
 WHERE e.qname = 'us-gaap:Revenues' AND f.numeric_value IS NOT NULL
-RETURN d.axis_uri, d.member_uri, f.numeric_value LIMIT 10
+RETURN d.axis_uri, d.member_uri, f.value LIMIT 10
 ```
 
 ## Rules of the road
@@ -99,13 +115,18 @@ RETURN d.axis_uri, d.member_uri, f.numeric_value LIMIT 10
 - **Periods.** Income-statement and cash-flow facts are `duration` with a
   `duration_type`; balance-sheet facts are `instant`. Filter accordingly or you
   get an empty or mixed result.
+- **Return `f.value`.** Read a fact's number from `f.value`, its exact text,
+  and keep `f.numeric_value` for the `IS NOT NULL` filter. `RETURN DISTINCT`:
+  a fact restated in later filings appears more than once.
 - **Anchor selectively.** Lead every `MATCH` with an `Entity` or `Report`; never
   with `Structure`, `Element` or `Period` alone. Always `LIMIT`.
 - **One `MATCH`, comma-separated patterns** for multiple relationships from the
   same node.
 - **Numbers vs prose.** Cypher and the shaped tools answer with numbers;
-  `search-documents` answers with prose. A complete analysis usually needs both:
-  the figure, then the disclosure that explains it.
+  `search-documents` and `search-text` answer with prose, and
+  `information-block` gives a section's numbers with its text beside them. A
+  complete analysis usually needs both: the figure, then the disclosure that
+  explains it.
 - **Fiscal calendars vary.** NVIDIA's fiscal 2026 ended 2026-01-25. Use
   `fiscal_year` / `fiscal_period` filters from the report's own focus rather
   than calendar assumptions.
