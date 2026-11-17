@@ -25,9 +25,9 @@ One authorization is **one graph**. The consent screen picks it, and the server'
 
 | Graph | What it is | Tools |
 |---|---|---|
-| `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | 10 analytical tools; Cypher, no GraphQL |
-| A RoboLedger graph (`kg…`) | A customer's general ledger — one reporting group: the group parent and any subsidiaries, each with its own books, chart, calendar and close. Fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | ~85 tools |
-| A RoboInvestor graph | Portfolios, securities, positions alongside the ledger. | ledger set + portfolio tools |
+| `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | analytical set; Cypher, no GraphQL |
+| A RoboLedger graph (`kg…`) | A customer's general ledger — one reporting group: the group parent and any subsidiaries, each with its own books, chart, calendar and close. Fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | full set |
+| A RoboInvestor graph | Portfolios, securities, positions. | portfolio tools; the ledger set too when the graph also carries RoboLedger |
 | A subgraph (`kg…_name`) | A workspace hanging off a parent graph; writable Cypher lives here. | parent's set, no memory |
 
 To work on a different graph, reconnect and pick it — there is no switch tool.
@@ -50,11 +50,17 @@ told to create one at robosystems.ai first.
 - **A company's financial statements** → `financial-statement-analysis` (SEC:
   by ticker; a ledger graph after materialization: by report). Current books on
   a ledger graph → `live-financial-statement` — `entity_id` for a subsidiary;
-  `consolidated: true` on the group parent for the whole group, which is a
-  combined statement (summed per concept, nothing eliminated), not a
-  consolidation.
+  `scope: consolidated` on the group parent for the whole group (the members
+  plus the consolidation entity's eliminations and noncontrolling interest);
+  `scope: combined` is the members summed with nothing eliminated.
 - **Compare specific metrics across periods or companies** → `build-fact-grid`.
 - **Find the XBRL element for a concept** ("revenue", "total debt") → `resolve-element`.
+- **One section of a report read whole** (a note, a details table, its
+  breakdowns and footing) → `disclosures` for the map, then `information-block`
+  for the one block. SEC: by ticker; a ledger graph: by report.
+- **One SEC filing's own text** (cover page, an Item, an exhibit, an 8-K
+  earnings release) → `search-text`, then `read-text` from a hit's offset;
+  `describe-filing` maps its Items. `sec` only.
 - **Narrative: MD&A, risk factors, policies, the tenant's own procedure docs** →
   `search-documents`, then `get-document-section` / `get-document`.
 - **Typed reads of ledger data** (fiscal calendar, entries, agents, mappings) →
