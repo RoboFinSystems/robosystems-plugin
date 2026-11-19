@@ -8,7 +8,8 @@ description: >-
   graph, or a `kg…` graph id is mentioned, to understand what the connection is
   scoped to, which tool family answers an intent, and how to explore a graph
   (schema → example queries → Cypher, plus GraphQL on ledger graphs). For SEC company analysis use the
-  sec-filing-analysis skill; for a month-end close use roboledger-close.
+  sec-filing-analysis skill; for a month-end close use roboledger-close; to load a
+  portfolio company's report from a file use roboinvestor-receive-report.
 ---
 
 # RoboSystems
@@ -27,7 +28,7 @@ One authorization is **one graph**. The consent screen picks it, and the server'
 |---|---|---|
 | `sec` (shared repository) | Public-company XBRL filings from SEC EDGAR. Read-only. | analytical set; Cypher, no GraphQL |
 | A RoboLedger graph (`kg…`) | A customer's general ledger — one reporting group: the group parent and any subsidiaries, each with its own books, chart, calendar and close. Fiscal calendar, journal entries, schedules, reports, forecasts, documents, memory. Reads and role-gated writes. | full set |
-| A RoboInvestor graph | Portfolios, securities, positions. | portfolio tools; the ledger set too when the graph also carries RoboLedger |
+| A RoboInvestor graph | Portfolios, securities, positions, and the reports portfolio companies send (shared from RoboLedger, or loaded from a file with `ingest-report`). | portfolio tools, `create-issuer`, `ingest-report` and the report reads; the ledger set too when the graph also carries RoboLedger |
 | A subgraph (`kg…_name`) | A workspace hanging off a parent graph; writable Cypher lives here. | parent's set, no memory |
 
 To work on a different graph, reconnect and pick it — there is no switch tool.
@@ -70,6 +71,8 @@ told to create one at robosystems.ai first.
   `get-graph-schema` and `get-example-queries`.
 - **Month-end close** → call `get-close-playbook` first, then follow the
   roboledger-close skill.
+- **A portfolio company's report from a PDF or a spreadsheet** → follow the
+  roboinvestor-receive-report skill (`create-issuer`, then `ingest-report`).
 - **Chart-of-accounts mapping** → `get-unmapped-elements`, `suggest-mapping`,
   `list-mapping-structures`, `get-mapping-summary`.
 - **Durable notes across sessions** → `recall` before re-deriving context;
