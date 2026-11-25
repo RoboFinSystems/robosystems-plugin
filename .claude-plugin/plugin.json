@@ -2,7 +2,7 @@
   "name": "robosystems",
   "displayName": "RoboSystems",
   "version": "1.0.0",
-  "description": "RoboSystems, the open-source knowledge graph for finance, over MCP: your general ledger and 8,000+ public companies' XBRL filings as traceable data, plus skills for SEC filing analysis, month-end close, board packs, loading a portfolio company's report from a file, and graph exploration.",
+  "description": "RoboSystems, the open-source knowledge graph for finance, over MCP: your company's books or portfolio and 8,000+ public companies' XBRL filings as traceable data, plus skills for SEC filing analysis, month-end close, board packs, loading a portfolio company's report from a file, and graph exploration.",
   "author": {
     "name": "RoboSystems",
     "url": "https://robosystems.ai"
